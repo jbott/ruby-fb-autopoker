@@ -3,10 +3,19 @@ fb-autopoker
 
 Facebook Auto Poker
 
-Built cause im bored...
+One of those lets-do-something-fun things I made when bored.
 
-you need ruby mechanize installed
+It requires the mechanize gem
 
-`gem install mechanize`
+Ubuntu Install Directions
+=========================
 
-Also, don't launch it too many times fast, or facebook with temporarity block you
+`sudo apt-get install ruby1.9.1 ruby1.9.1-dev libxml2-dev libxslt1-dev rubygems`
+
+`sudo gem install mechanize`
+
+Then Launch it with 
+
+`ruby1.9.1 autopoke.rb`
+
+Also, don't launch it too many times fast, or facebook will temporarily block you
