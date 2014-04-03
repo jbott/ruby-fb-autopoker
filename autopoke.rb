@@ -1,32 +1,43 @@
 require 'rubygems'
 require 'mechanize'
 
-email = "EMAIL"
-pass = "PASSWORD"
+email = 'your_email'
+password = 'your_password'
 totalpokes = 0
-print email + "\n"
+puts email
 
-agent = Mechanize.new
-agent.user_agent_alias = "Mac FireFox"
+agent = Mechanize.new()
+agent.user_agent_alias = "Mac Firefox"
 agent.cookie_jar.clear!
-page = agent.get "http://m.facebook.com/"
-#puts page.title
+page = agent.get "http://m.facebook.com"
 
-login_form = page.forms.first
-login_form.field_with(:name => 'email').value = email
-login_form.field_with(:name => 'pass').value = pass
+lf = page.forms.first
+lf.field_with(:name => 'email').value = email
+lf.field_with(:name => 'pass').value = password
 
-result = login_form.submit(login_form.button_with(:name => 'login'))
+result = lf.submit(lf.button_with(:name => 'login'))
+puts result.title
+while(result.title != 'Facebook') do
+	if  result.title == 'Remember Browser'
+		lf = result.forms.first
+		result = lf.submit(lf.button_with(:name => 'submit[Continue]'))
+		puts result.title
+	elsif result.title == "Review Recent Login"
+		lf = result.forms.first
+		result = lf.submit(lf.button_with(:name => "submit[Continue]"))
+		lf = result.forms.first
+		result = lf.submit(lf.button_with(:name => 'submit[This is Okay]'))
+		puts result.title	
+	end
+end
 loop do
-	print "Scanning Page:"
+	print "Scanning Page: " 
 	pokes = agent.get "http://m.facebook.com/pokes"
 	puts pokes.title
-	pokes.links_with(:text => 'Poke back').each do |link|
-		totalpokes = totalpokes + 1
-		print("Poking! " + totalpokes.to_s + " Total")
+	pokes.links_with(:text => "Poke back").each do |link|
+		totalpokes = totalpokes +1
+		puts "Poking! " + totalpokes.to_s + " total."
 		link.click
 	end
-	#page2 = agent.click(result.link_with(:text => 'Try Again'))
-	#puts page2.body
-	sleep(5)
+	sleep(5)	
 end
